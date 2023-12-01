@@ -1,5 +1,6 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use regex::Regex;
 
 pub fn solve() {
     const FILE_PATH: &str = "assets/input01.txt";
@@ -8,8 +9,6 @@ pub fn solve() {
     let reader = BufReader::new(file);
     let mut calibration: u32 = 0;
     let mut calibration2: u32 = 0;
-    const LETTER_DIGITS : [&str; 9] = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-    const NUMERIC_DIGITS : [&str; 9] = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
     for line in reader.lines() {
         match line {
@@ -29,31 +28,23 @@ pub fn solve() {
                         }
                     }
                     calibration += (curr_char.to_digit(10)).unwrap();
-
+                    
                     // Part 2
-                    let mut min_index;
-                    let mut pat_index : usize = 0;
-                    let mut new_content = content.clone();
-                    loop {
-                        min_index = new_content.len();
-                        for (ind, letter_digit) in LETTER_DIGITS.iter().enumerate() {
-                            match new_content.find(letter_digit) {
-                                Some(index) => {
-                                    if index < min_index {
-                                        min_index = index;
-                                        pat_index = ind;
-                                    }
-                                }
-                                None => {}
-                            }
+                    let re = Regex::new(r"(one|two|three|four|five|six|seven|eight|nine)").unwrap();
+                    let new_content = re.replace_all(&content, |caps: &regex::Captures| {
+                        match &caps[0] {
+                            "one" => "1",
+                            "two" => "2",
+                            "three" => "3",
+                            "four" => "4",
+                            "five" => "5",
+                            "six" => "6",
+                            "seven" => "7",
+                            "eight" => "8",
+                            "nine" => "9",
+                            _ => ""
                         }
-                        if min_index < new_content.len() {
-                            new_content = new_content.replacen(LETTER_DIGITS[pat_index], NUMERIC_DIGITS[pat_index], 1)
-                        }
-                        else {
-                            break;
-                        }
-                    }
+                    });
 
                     found = false;
                     for ch in new_content.chars() {
