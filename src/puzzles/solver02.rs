@@ -1,3 +1,4 @@
+use std::cmp::max;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use regex::Regex;
@@ -10,6 +11,7 @@ pub fn solve() {
     let reader = BufReader::new(file);
     let mut possible: bool;
     let mut sum_of_ids: usize = 0;
+    let mut sum_of_pows: u64 = 0;
 
     for (i, line) in reader.lines().enumerate() {
         match line {
@@ -33,6 +35,32 @@ pub fn solve() {
                 if possible {
                     sum_of_ids += i + 1;
                 }
+
+                let mut min_blue = 0;
+                let mut min_red = 0;
+                let mut min_green = 0;
+
+                for part in content.split(";") {
+                    for caps in re.captures_iter(part) {
+                        let num_of_cubes: u64 = caps.get(1).unwrap().as_str().parse().unwrap();
+                        let color = caps.get(2).unwrap().as_str();
+
+                        match color {
+                            "red" => {
+                                min_red = max(min_red, num_of_cubes);
+                            },
+                            "blue" => {
+                                min_blue = max(min_blue, num_of_cubes);
+                            },
+                            "green" => {
+                                min_green = max(min_green, num_of_cubes);
+                            },
+                            _ => {}
+                        }
+                    }
+                }
+
+                sum_of_pows += min_red * min_blue * min_green;
             },
             Err(error) => {
                 eprintln!("Error: {}", error)
@@ -41,4 +69,5 @@ pub fn solve() {
     }
 
     println!("Part 1 solution is: {}", sum_of_ids);
+    println!("Part 2 solution is: {}", sum_of_pows);
 }
