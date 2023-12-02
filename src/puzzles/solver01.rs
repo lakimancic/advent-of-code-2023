@@ -1,7 +1,8 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use regex::Regex;
+use regex::{Regex, Captures};
 
+#[allow(dead_code)]
 pub fn solve() {
     const FILE_PATH: &str = "assets/input01.txt";
     let file = File::open(FILE_PATH).expect("Failed to open input file!");
@@ -31,7 +32,7 @@ pub fn solve() {
                     
                     // Part 2
                     let re = Regex::new(r"(one|two|three|four|five|six|seven|eight|nine)").unwrap();
-                    let new_content = re.replace_all(&content, |caps: &regex::Captures| {
+                    let new_content = re.replace_all(&content, |caps: &Captures| {
                         match &caps[0] {
                             "one" => "1",
                             "two" => "2",
