@@ -66,7 +66,7 @@ impl RangeSolver {
 #[allow(dead_code)]
 pub fn solve() {
     const FILE_PATH: &str = "assets/input05.txt";
-    let txt = std::fs::read_to_string(FILE_PATH).expect("Error while reading file!");
+    let txt = std::fs::read_to_string(FILE_PATH).unwrap();
     let mut parts = txt.split("\n\n").into_iter();
 
     let seeds: Vec<u64> = parts.next().unwrap().split_whitespace().filter_map(|x| x.trim().parse().ok()).collect();
