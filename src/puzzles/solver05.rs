@@ -28,6 +28,39 @@ impl RangeSolver {
         }
         n
     }
+
+    fn solve_ranges(&self, ranges: &mut Vec<(u64, u64)>) -> Vec<(u64, u64)> {
+        let mut ret_ranges: Vec<(u64, u64)> = Vec::new();
+
+        for (dest, source, size) in &self.ranges {
+            let src_end = *source + *size;
+            let mut new_ranges: Vec<(u64, u64)> = Vec::new();
+
+            while ranges.len() > 0 {
+                let (start, end) = ranges.pop().unwrap();
+
+                let before = (start, cmp::min(end, *source));
+                let inter = (cmp::max(start, *source), cmp::min(src_end, end));
+                let after = (cmp::max(src_end, start), end);
+
+                if before.1 > before.0 {
+                    new_ranges.push(before);
+                }
+                if inter.1 > inter.0 {
+                    ret_ranges.push((inter.0 - source + dest, inter.1 - source + dest));
+                }
+                if after.1 > after.0 {
+                    new_ranges.push(after);
+                }
+            }
+
+            ranges.append(&mut new_ranges);
+        }
+
+        ret_ranges.append(ranges);
+
+        ret_ranges
+    }
 }
 
 #[allow(dead_code)]
@@ -53,4 +86,17 @@ pub fn solve() {
     }
 
     println!("Part 1 solution is: {}", min_val);
+
+    min_val = std::u64::MAX;
+    for chunk in seeds.chunks(2) {
+        let mut temp = vec![(chunk[0], chunk[0] + chunk[1])];
+
+        for rsolver in &range_solvers {
+            temp = rsolver.solve_ranges(&mut temp);
+        }
+
+        min_val = cmp::min(min_val, temp.into_iter().min().unwrap().0);
+    }
+
+    println!("Part 2 solution is: {}", min_val);
 }
