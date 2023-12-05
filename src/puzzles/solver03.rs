@@ -1,26 +1,17 @@
 use std::collections::{HashSet, HashMap};
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 #[allow(dead_code)]
 pub fn solve() {
     const FILE_PATH: &str = "assets/input03.txt";
-    let file = File::open(FILE_PATH).expect("Failed to open input file!");
+    let txt = std::fs::read_to_string(FILE_PATH).unwrap();
+    let lines = txt.lines();
 
-    let reader = BufReader::new(file);
     let mut field: Vec<Vec<char>> = Vec::new();
     let mut bit_field : Vec<Vec<bool>> = Vec::new();
 
-    for line in reader.lines() {
-        match line {
-            Ok(content) => {
-                bit_field.push(vec![false; content.len()]);
-                field.push(content.chars().collect());
-            },
-            Err(error) => {
-                eprintln!("Error: {}", error)
-            }
-        }
+    for line in lines {
+        bit_field.push(vec![false; line.len()]);
+        field.push(line.chars().collect());
     }
 
     for i in 0..field.len() {
