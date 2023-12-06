@@ -8,6 +8,15 @@ fn read_line_to_vec(line: &str) -> Vec<u32> {
         .collect::<Vec<u32>>()
 }
 
+fn read_line_to_u64(line: &str) -> u64 {
+    line.split(":")
+        .collect::<Vec<&str>>()[1]
+        .split_whitespace()
+        .collect::<String>()
+        .parse::<u64>()
+        .unwrap()
+}
+
 #[allow(dead_code)]
 pub fn solve() {
     const FILE_PATH: &str = "assets/input06.txt";
@@ -29,4 +38,16 @@ pub fn solve() {
     }
 
     println!("Part 1 solution is: {}", prod1);
+
+    let time = read_line_to_u64(lines[0]);
+    let dist = read_line_to_u64(lines[1]);
+    let mut cnt: u64 = 0;
+
+    for i in 1..time {
+        if i * (time - i) > dist {
+            cnt += 1;
+        }
+    }
+
+    println!("Part 2 solution is: {}", cnt);
 }
