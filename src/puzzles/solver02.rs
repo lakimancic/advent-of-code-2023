@@ -1,7 +1,6 @@
 use std::cmp::max;
 use regex::Regex;
 
-#[allow(dead_code)]
 pub fn solve() {
     const FILE_PATH: &str = "assets/input02.txt";
     let txt = std::fs::read_to_string(FILE_PATH).unwrap();

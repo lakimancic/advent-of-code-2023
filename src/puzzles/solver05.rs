@@ -63,7 +63,6 @@ impl RangeSolver {
     }
 }
 
-#[allow(dead_code)]
 pub fn solve() {
     const FILE_PATH: &str = "assets/input05.txt";
     let txt = std::fs::read_to_string(FILE_PATH).unwrap();
