@@ -31,12 +31,17 @@ pub fn solve() {
     let txt = std::fs::read_to_string(FILE_PATH).unwrap();
 
     let mut sum1: i64 = 0;
+    let mut sum2: i64 = 0;
 
     for line in txt.lines() {
         let mut nums = line_to_vec32(line);
+        let mut nums2 = line_to_vec32(line);
+        nums2.reverse();
 
         sum1 += calc_sum(&mut nums);
+        sum2 += calc_sum(&mut nums2);
     }
 
     println!("Part 1 solution is: {}", sum1);
+    println!("Part 2 solution is: {}", sum2);
 }
