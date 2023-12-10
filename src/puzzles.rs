@@ -7,3 +7,4 @@ pub mod solver06;
 pub mod solver07;
 pub mod solver08;
 pub mod solver09;
+pub mod solver10;
