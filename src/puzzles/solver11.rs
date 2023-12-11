@@ -1,10 +1,6 @@
 use std::cmp::{min,max};
 
-pub fn solve() {
-    const FILE_PATH: &str = "assets/input11.txt";
-    let txt = std::fs::read_to_string(FILE_PATH).unwrap();
-    let mat: Vec<Vec<char>> = txt.lines().map(|x| x.chars().collect::<Vec<char>>()).collect();
-
+fn calc(mat: &Vec<Vec<char>>, k: usize) -> usize {
     let n = mat.len();
     let m = mat[0].len();
     let mut rows = vec![1; n];
@@ -19,7 +15,7 @@ pub fn solve() {
             }
         }
         if is_empty {
-            rows[i] = 2;
+            rows[i] = k;
         }
     }
 
@@ -32,7 +28,7 @@ pub fn solve() {
             }
         }
         if is_empty {
-            cols[i] = 2;
+            cols[i] = k;
         }
     }
 
@@ -64,5 +60,14 @@ pub fn solve() {
         }
     }
 
-    println!("Part 1 solution is: {}", sum);
+    sum
+}
+
+pub fn solve() {
+    const FILE_PATH: &str = "assets/input11.txt";
+    let txt = std::fs::read_to_string(FILE_PATH).unwrap();
+    let mat: Vec<Vec<char>> = txt.lines().map(|x| x.chars().collect::<Vec<char>>()).collect();
+
+    println!("Part 1 solution is: {}", calc(&mat, 2));
+    println!("Part 1 solution is: {}", calc(&mat, 1000000));
 }
