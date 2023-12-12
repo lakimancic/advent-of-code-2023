@@ -9,3 +9,4 @@ pub mod solver08;
 pub mod solver09;
 pub mod solver10;
 pub mod solver11;
+pub mod solver12;
