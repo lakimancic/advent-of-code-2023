@@ -43,6 +43,7 @@ pub fn solve() {
     let txt = std::fs::read_to_string(FILE_PATH).unwrap();
 
     let mut sum: usize = 0;
+    let mut sum2: usize = 0;
     
     for line in txt.lines() {
         let mut dp: HashMap<(usize, usize, usize), usize> = HashMap::new();
@@ -52,7 +53,14 @@ pub fn solve() {
         let blocks = splits[1].split(",").map(|x| x.parse::<usize>().unwrap()).collect::<Vec<usize>>();
 
         sum += solve_dp(&mut dp, &types, &blocks, 0, 0, 0);
+
+        dp.clear();
+        let types = vec![splits[0];5].join("?").chars().collect::<Vec<char>>();
+        let blocks = vec![splits[1];5].join(",").split(",").map(|x| x.parse::<usize>().unwrap()).collect::<Vec<usize>>();
+
+        sum2 += solve_dp(&mut dp, &types, &blocks, 0, 0, 0);
     }
 
     println!("Part 1 solution is: {}", sum);
+    println!("Part 2 solution is: {}", sum2);
 }
