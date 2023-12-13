@@ -6,7 +6,7 @@ fn diff(s1: &Vec<char>, s2: &Vec<char>) -> usize {
     c
 }
 
-fn solve_part(part: &str) -> usize {
+fn solve_part(part: &str, comp: usize) -> usize {
     let lines: Vec<Vec<char>> = part.split_ascii_whitespace().map(|line| line.chars().collect::<Vec<char>>()).collect();
 
     let mut c = 0;
@@ -30,7 +30,7 @@ fn solve_part(part: &str) -> usize {
             eq += diff(&lines_tranposed[i-j], &lines_tranposed[i+1+j]);
         }
 
-        if eq == 0 {
+        if eq == comp {
             c = i + 1;
         }
     }
@@ -42,7 +42,7 @@ fn solve_part(part: &str) -> usize {
             eq += diff(&lines[i-j], &lines[i+1+j]);
         }
 
-        if eq == 0 {
+        if eq == comp {
             r = i + 1;
         }
     }
@@ -55,10 +55,13 @@ pub fn solve() {
     let txt = std::fs::read_to_string(FILE_PATH).unwrap();
     let parts = txt.split("\n\n");
     let mut sum: usize = 0;
+    let mut sum2: usize = 0;
 
     for part in parts {
-        sum += solve_part(part);
+        sum += solve_part(part, 0);
+        sum2 += solve_part(part, 1);
     }
 
     println!("Part 1 solution is: {}", sum);
+    println!("Part 2 solution is: {}", sum2);
 }
