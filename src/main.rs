@@ -15,6 +15,7 @@ fn call_solve(day: u32) {
         10 => puzzles::solver10::solve(),
         11 => puzzles::solver11::solve(),
         12 => puzzles::solver12::solve(),
+        13 => puzzles::solver13::solve(),
         _ => println!("Invalid day!")
     }
 }
