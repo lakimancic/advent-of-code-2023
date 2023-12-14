@@ -1,82 +1,43 @@
 use std::collections::HashMap;
 
-fn move_north(mat: &mut Vec<Vec<char>>, n: &usize, m: &usize) {
-    for i in 0..*m {
-        let mut c: usize = 0;
-        for j in 0..*n {
-            if mat[j][i] == 'O' {
+fn move_dir(mat: &mut Vec<Vec<char>>, n: &usize, m: &usize, dir1: bool, dir2: bool) {
+    for i in 0..if dir2 { *m } else { *n } {
+        let mut c: usize = if dir1 { 0 } else if dir2 { n-1 } else { m-1 };
+        let range = if dir1 { 
+            (0..if dir2 { *n } else { *m }).collect::<Vec<_>>() 
+        } else { 
+            (0..if dir2 { *n } else { *m }).rev().collect::<Vec<_>>() 
+        };
+        for j in range {
+            if mat[if dir2 { j } else { i }][if dir2 { i } else { j }] == 'O' {
                 if c != j {
-                    mat[c][i] = 'O';
-                    mat[j][i] = '.';
+                    mat[if dir2 { c } else { i }][if dir2 { i } else { c }] = 'O';
+                    mat[if dir2 { j } else { i }][if dir2 { i } else { j }] = '.';
                 }
-                c += 1;
-            }
-            else if mat[j][i] == '#' {
-                c = j + 1;
-            }
-        }
-    }
-}
-
-fn move_west(mat: &mut Vec<Vec<char>>, n: &usize, m: &usize) {
-    for i in 0..*n {
-        let mut c: usize = 0;
-        for j in 0..*m {
-            if mat[i][j] == 'O' {
-                if c != j {
-                    mat[i][c] = 'O';
-                    mat[i][j] = '.';
+                if dir1 {
+                    c += 1;
                 }
-                c += 1;
-            }
-            else if mat[i][j] == '#' {
-                c = j + 1;
-            }
-        }
-    }
-}
-
-fn move_south(mat: &mut Vec<Vec<char>>, n: &usize, m: &usize) {
-    for i in 0..*m {
-        let mut c: usize = n-1;
-        for j in (0..*n).rev() {
-            if mat[j][i] == 'O' {
-                if c != j {
-                    mat[c][i] = 'O';
-                    mat[j][i] = '.';
+                else {
+                    if c > 0 { c -= 1 };
                 }
-                if c > 0 { c -= 1; }
             }
-            else if mat[j][i] == '#' {
-                if j > 0 { c = j - 1; }
-            }
-        }
-    }
-}
-
-fn move_east(mat: &mut Vec<Vec<char>>, n: &usize, m: &usize) {
-    for i in 0..*n {
-        let mut c: usize = m-1;
-        for j in (0..*m).rev() {
-            if mat[i][j] == 'O' {
-                if c != j {
-                    mat[i][c] = 'O';
-                    mat[i][j] = '.';
+            else if mat[if dir2 { j } else { i }][if dir2 { i } else { j }] == '#' {
+                if dir1 {
+                    c = j + 1;
                 }
-                if c > 0 { c -= 1; }
-            }
-            else if mat[i][j] == '#' {
-                if j > 0 { c = j - 1; }
+                else {
+                    if j > 0 { c = j - 1 };
+                }
             }
         }
     }
 }
 
 fn cycle(mat: &mut Vec<Vec<char>>, n: &usize, m: &usize) {
-    move_north(mat, n, m);
-    move_west(mat, n, m);
-    move_south(mat, n, m);
-    move_east(mat, n, m);
+    move_dir(mat, n, m, true, true);
+    move_dir(mat, n, m, true, false);
+    move_dir(mat, n, m, false, true);
+    move_dir(mat, n, m, false, false);
 }
 
 fn calc_load(mat: &Vec<Vec<char>>, n: &usize, m: &usize) -> usize {
@@ -104,7 +65,7 @@ pub fn solve() {
     let n = mat.len();
     let m = mat[0].len();
 
-    move_north(&mut mat, &n, &m);
+    move_dir(&mut mat, &n, &m, true, true);
     println!("Part 1 solution is: {}", calc_load(&mat, &n, &m));
 
     let mut used: HashMap<String, usize> = HashMap::new();
