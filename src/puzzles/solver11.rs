@@ -69,5 +69,5 @@ pub fn solve() {
     let mat: Vec<Vec<char>> = txt.lines().map(|x| x.chars().collect::<Vec<char>>()).collect();
 
     println!("Part 1 solution is: {}", calc(&mat, 2));
-    println!("Part 1 solution is: {}", calc(&mat, 1000000));
+    println!("Part 2 solution is: {}", calc(&mat, 1000000));
 }
