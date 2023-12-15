@@ -12,3 +12,4 @@ pub mod solver11;
 pub mod solver12;
 pub mod solver13;
 pub mod solver14;
+pub mod solver15;
