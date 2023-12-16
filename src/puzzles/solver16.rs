@@ -81,19 +81,19 @@ fn dfs(i: i64, j: i64, dir: usize, mat: &Vec<Vec<char>>, vis: &mut Vec<Vec<[bool
     }
 }
 
-pub fn solve() {
-    const FILE_PATH: &str = "assets/input00.txt";
-    let txt = std::fs::read_to_string(FILE_PATH).unwrap();
-    let mat = txt.lines().map(|line| line.chars().collect::<Vec<char>>()).collect::<Vec<Vec<char>>>();
-    let n = mat.len();
-    let m = mat[0].len();
+fn clear_vis(vis: &mut Vec<Vec<[bool; 4]>>) {
+    for i in vis {
+        for j in i {
+            for k in j {
+                *k = false;
+            }
+        }
+    }
+}
 
-    let mut vis = vec![vec![[false; 4]; m];n];
-    vis[0][0][0] = true;
-    dfs(0, 0, 0, &mat, &mut vis);
-    let mut cnt: usize = 0;
-
-    for i in &vis {
+fn count_vis(vis: &Vec<Vec<[bool; 4]>>) -> usize {
+    let mut cnt = 0usize;
+    for i in vis {
         for j in i {
             let mut f = false;
             for k in j {
@@ -102,6 +102,45 @@ pub fn solve() {
             cnt += f as usize;
         }
     }
+    cnt
+}
+
+pub fn solve() {
+    const FILE_PATH: &str = "assets/input16.txt";
+    let txt = std::fs::read_to_string(FILE_PATH).unwrap();
+    let mat = txt.lines().map(|line| line.chars().collect::<Vec<char>>()).collect::<Vec<Vec<char>>>();
+    let n = mat.len();
+    let m = mat[0].len();
+
+    let mut vis = vec![vec![[false; 4]; m];n];
+    vis[0][0][0] = true;
+    dfs(0, 0, 0, &mat, &mut vis);
+    let cnt: usize = count_vis(&vis);
+    let mut max_cnt: usize = cnt;
+    let mut s = (0i64, 1i64);
+
+    for i in 1..5usize {
+        let mn = if i%2==1 { m } else { n };
+        for j in 1..mn {
+            clear_vis(&mut vis);
+            vis[s.0 as usize][s.1 as usize][i % 4] = true;
+            dfs(s.0, s.1, i % 4, &mat, &mut vis);
+            max_cnt = std::cmp::max(max_cnt, count_vis(&vis));
+            if j == mn-1 {
+                clear_vis(&mut vis);
+                vis[s.0 as usize][s.1 as usize][(i+1) % 4] = true;
+                dfs(s.0, s.1, (i+1) % 4, &mat, &mut vis);
+                max_cnt = std::cmp::max(max_cnt, count_vis(&vis));
+                s.0 += DIRS[i%4].0;
+                s.1 += DIRS[i%4].1;
+            }
+            else {
+                s.0 += DIRS[i-1].0;
+                s.1 += DIRS[i-1].1;
+            }
+        }
+    }
 
     println!("Part 1 solution is: {}", cnt);
+    println!("Part 2 solution is: {}", max_cnt);
 }
