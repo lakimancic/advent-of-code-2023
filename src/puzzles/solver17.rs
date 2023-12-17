@@ -3,7 +3,7 @@ use std::{collections::HashMap, cmp::Reverse};
 
 static DIRS: [(i32, i32); 4] = [(0, 1), (1, 0), (0, -1), (-1, 0)];
 
-fn dijkstra(mat: &Vec<Vec<u32>>) -> u32 {
+fn dijkstra(mat: &Vec<Vec<u32>>, minm: u32, maxm: u32) -> u32 {
     let mut pq: PriorityQueue<(u32, i32, i32, usize), Reverse<u32>> = PriorityQueue::new();
     let mut vis = vec![vec![[false;4];mat[0].len()];mat.len()];
     let mut dist: HashMap<(i32, i32, usize), u32> = HashMap::new();
@@ -29,12 +29,13 @@ fn dijkstra(mat: &Vec<Vec<u32>>) -> u32 {
             if ndir == dir || (ndir + 2) % 4 == dir {
                 continue;
             }
-            for ndis in 1..4 {
-                let ni = ci + DIRS[ndir].0 * ndis;
-                let nj = cj + DIRS[ndir].1 * ndis;
+            for ndis in 1..maxm+1 {
+                let ni = ci + DIRS[ndir].0 * (ndis as i32);
+                let nj = cj + DIRS[ndir].1 * (ndis as i32);
                 if ni < 0 || ni as usize >= mat.len() { continue; }
                 if nj < 0 || nj as usize >= mat[0].len() { continue; }
                 dinc += mat[ni as usize][nj as usize];
+                if ndis < minm { continue; }
                 let nd = d + dinc;
                 let for_c = match dist.get(&(ni, nj, ndir)) {
                     Some(x) => *x,
@@ -57,5 +58,6 @@ pub fn solve() {
     let txt = std::fs::read_to_string(FILE_PATH).unwrap();
     let mat = txt.lines().map(|line| line.chars().map(|ch| ch as u32 - 0x30).collect::<Vec<u32>>()).collect::<Vec<Vec<u32>>>();
 
-    println!("Part 1 solution is: {}", dijkstra(&mat));
+    println!("Part 1 solution is: {}", dijkstra(&mat, 1, 3));
+    println!("Part 2 solution is: {}", dijkstra(&mat, 4, 10));
 }
