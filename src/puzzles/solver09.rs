@@ -12,8 +12,8 @@ fn calc_sum(nums: &mut Vec<i64>) -> i64 {
     while is_loop {
         is_loop = false;
 
-        for i in 0..n-1 {
-            nums[i] = nums[i+1] - nums[i];
+        for i in 0..n - 1 {
+            nums[i] = nums[i + 1] - nums[i];
             if nums[i] != 0 {
                 is_loop = true;
             }

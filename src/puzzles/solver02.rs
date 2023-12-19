@@ -1,5 +1,5 @@
-use std::cmp::max;
 use regex::Regex;
+use std::cmp::max;
 
 pub fn solve() {
     const FILE_PATH: &str = "assets/input02.txt";
@@ -15,16 +15,17 @@ pub fn solve() {
         possible = true;
 
         for caps in re.captures_iter(line) {
-
             let num_of_cubes: u32 = caps.get(1).unwrap().as_str().parse().unwrap();
             let color = caps.get(2).unwrap().as_str();
 
-            possible = possible && (num_of_cubes <= match color {
-                "red" => 12,
-                "green" => 13,
-                "blue" => 14,
-                _ => 0
-            });
+            possible = possible
+                && (num_of_cubes
+                    <= match color {
+                        "red" => 12,
+                        "green" => 13,
+                        "blue" => 14,
+                        _ => 0,
+                    });
         }
 
         if possible {
@@ -43,13 +44,13 @@ pub fn solve() {
                 match color {
                     "red" => {
                         min_red = max(min_red, num_of_cubes);
-                    },
+                    }
                     "blue" => {
                         min_blue = max(min_blue, num_of_cubes);
-                    },
+                    }
                     "green" => {
                         min_green = max(min_green, num_of_cubes);
-                    },
+                    }
                     _ => {}
                 }
             }

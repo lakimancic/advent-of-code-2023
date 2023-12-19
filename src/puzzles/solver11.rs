@@ -1,4 +1,4 @@
-use std::cmp::{min,max};
+use std::cmp::{max, min};
 
 fn calc(mat: &Vec<Vec<char>>, k: usize) -> usize {
     let n = mat.len();
@@ -43,8 +43,8 @@ fn calc(mat: &Vec<Vec<char>>, k: usize) -> usize {
         }
     }
 
-    for i in 0..galaxies.len()-1 {
-        for j in i+1..galaxies.len() {
+    for i in 0..galaxies.len() - 1 {
+        for j in i + 1..galaxies.len() {
             let si = min(galaxies[i].0, galaxies[j].0);
             let ei = max(galaxies[i].0, galaxies[j].0);
             let sj = min(galaxies[i].1, galaxies[j].1);
@@ -66,7 +66,10 @@ fn calc(mat: &Vec<Vec<char>>, k: usize) -> usize {
 pub fn solve() {
     const FILE_PATH: &str = "assets/input11.txt";
     let txt = std::fs::read_to_string(FILE_PATH).unwrap();
-    let mat: Vec<Vec<char>> = txt.lines().map(|x| x.chars().collect::<Vec<char>>()).collect();
+    let mat: Vec<Vec<char>> = txt
+        .lines()
+        .map(|x| x.chars().collect::<Vec<char>>())
+        .collect();
 
     println!("Part 1 solution is: {}", calc(&mat, 2));
     println!("Part 2 solution is: {}", calc(&mat, 1000000));

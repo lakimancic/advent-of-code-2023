@@ -2,11 +2,17 @@ use std::collections::HashMap;
 
 fn move_dir(mat: &mut Vec<Vec<char>>, n: &usize, m: &usize, dir1: bool, dir2: bool) {
     for i in 0..if dir2 { *m } else { *n } {
-        let mut c: usize = if dir1 { 0 } else if dir2 { n-1 } else { m-1 };
-        let range = if dir1 { 
-            (0..if dir2 { *n } else { *m }).collect::<Vec<_>>() 
-        } else { 
-            (0..if dir2 { *n } else { *m }).rev().collect::<Vec<_>>() 
+        let mut c: usize = if dir1 {
+            0
+        } else if dir2 {
+            n - 1
+        } else {
+            m - 1
+        };
+        let range = if dir1 {
+            (0..if dir2 { *n } else { *m }).collect::<Vec<_>>()
+        } else {
+            (0..if dir2 { *n } else { *m }).rev().collect::<Vec<_>>()
         };
         for j in range {
             if mat[if dir2 { j } else { i }][if dir2 { i } else { j }] == 'O' {
@@ -16,17 +22,18 @@ fn move_dir(mat: &mut Vec<Vec<char>>, n: &usize, m: &usize, dir1: bool, dir2: bo
                 }
                 if dir1 {
                     c += 1;
+                } else {
+                    if c > 0 {
+                        c -= 1
+                    };
                 }
-                else {
-                    if c > 0 { c -= 1 };
-                }
-            }
-            else if mat[if dir2 { j } else { i }][if dir2 { i } else { j }] == '#' {
+            } else if mat[if dir2 { j } else { i }][if dir2 { i } else { j }] == '#' {
                 if dir1 {
                     c = j + 1;
-                }
-                else {
-                    if j > 0 { c = j - 1 };
+                } else {
+                    if j > 0 {
+                        c = j - 1
+                    };
                 }
             }
         }
@@ -60,8 +67,14 @@ pub fn solve() {
     const FILE_PATH: &str = "assets/input14.txt";
     let txt = std::fs::read_to_string(FILE_PATH).unwrap();
 
-    let mut mat = txt.lines().map(|line| line.chars().collect::<Vec<char>>()).collect::<Vec<Vec<char>>>();
-    let mut mat2 = txt.lines().map(|line| line.chars().collect::<Vec<char>>()).collect::<Vec<Vec<char>>>();
+    let mut mat = txt
+        .lines()
+        .map(|line| line.chars().collect::<Vec<char>>())
+        .collect::<Vec<Vec<char>>>();
+    let mut mat2 = txt
+        .lines()
+        .map(|line| line.chars().collect::<Vec<char>>())
+        .collect::<Vec<Vec<char>>>();
     let n = mat.len();
     let m = mat[0].len();
 
@@ -94,5 +107,4 @@ pub fn solve() {
     }
 
     println!("Part 2 solution is: {}", calc_load(&mat2, &n, &m));
-
 }

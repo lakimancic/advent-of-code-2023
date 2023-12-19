@@ -1,6 +1,5 @@
 fn read_line_to_vec(line: &str) -> Vec<u32> {
-    line.split(":")
-        .collect::<Vec<&str>>()[1]
+    line.split(":").collect::<Vec<&str>>()[1]
         .split_whitespace()
         .collect::<Vec<&str>>()
         .into_iter()
@@ -9,8 +8,7 @@ fn read_line_to_vec(line: &str) -> Vec<u32> {
 }
 
 fn read_line_to_u64(line: &str) -> u64 {
-    line.split(":")
-        .collect::<Vec<&str>>()[1]
+    line.split(":").collect::<Vec<&str>>()[1]
         .split_whitespace()
         .collect::<String>()
         .parse::<u64>()

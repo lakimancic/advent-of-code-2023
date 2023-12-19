@@ -2,7 +2,7 @@ use std::cmp;
 
 #[derive(Debug)]
 struct RangeSolver {
-    ranges: Vec<(u64, u64, u64)>
+    ranges: Vec<(u64, u64, u64)>,
 }
 
 impl RangeSolver {
@@ -12,7 +12,10 @@ impl RangeSolver {
         mini_parts.next();
 
         for mini_part in mini_parts {
-            let temp: Vec<u64> = mini_part.split_whitespace().filter_map(|x| x.trim().parse().ok()).collect();
+            let temp: Vec<u64> = mini_part
+                .split_whitespace()
+                .filter_map(|x| x.trim().parse().ok())
+                .collect();
             let temp = (temp[0], temp[1], temp[2]);
             parsed.push(temp);
         }
@@ -68,7 +71,12 @@ pub fn solve() {
     let txt = std::fs::read_to_string(FILE_PATH).unwrap();
     let mut parts = txt.split("\n\n").into_iter();
 
-    let seeds: Vec<u64> = parts.next().unwrap().split_whitespace().filter_map(|x| x.trim().parse().ok()).collect();
+    let seeds: Vec<u64> = parts
+        .next()
+        .unwrap()
+        .split_whitespace()
+        .filter_map(|x| x.trim().parse().ok())
+        .collect();
     let mut range_solvers: Vec<RangeSolver> = Vec::new();
 
     for part in parts {

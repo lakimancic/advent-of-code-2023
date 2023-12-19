@@ -6,7 +6,7 @@ fn hash(str: &str) -> u32 {
     h
 }
 
-fn find(key: &str, hashmap: &Vec<Vec<(String,u32)>>) -> usize {
+fn find(key: &str, hashmap: &Vec<Vec<(String, u32)>>) -> usize {
     let arr = &hashmap[hash(key) as usize];
     for (i, val) in arr.into_iter().enumerate() {
         if val.0 == key {
@@ -17,18 +17,17 @@ fn find(key: &str, hashmap: &Vec<Vec<(String,u32)>>) -> usize {
     usize::MAX
 }
 
-fn parse_step(step: &String, hashmap: &mut Vec<Vec<(String,u32)>>) {
+fn parse_step(step: &String, hashmap: &mut Vec<Vec<(String, u32)>>) {
     let n = step.len();
 
-    if step.chars().nth(n-1).unwrap() == '-' {
-        let key = &step[0..n-1];
+    if step.chars().nth(n - 1).unwrap() == '-' {
+        let key = &step[0..n - 1];
         let found = find(&key, &hashmap);
 
         if found < usize::MAX {
             hashmap[hash(key) as usize].remove(found);
         }
-    }
-    else {
+    } else {
         let splits = step.split("=").collect::<Vec<&str>>();
         let key = splits[0];
         let value = splits[1].parse::<u32>().unwrap();
@@ -36,8 +35,7 @@ fn parse_step(step: &String, hashmap: &mut Vec<Vec<(String,u32)>>) {
         let found = find(key, &hashmap);
         if found < usize::MAX {
             hashmap[hash(key) as usize][found] = (key.to_string(), value);
-        }
-        else {
+        } else {
             hashmap[hash(key) as usize].push((key.to_string(), value));
         }
     }
@@ -50,7 +48,7 @@ pub fn solve() {
 
     let mut sum1: u32 = 0;
     let mut sum2: usize = 0;
-    let mut hashmap: Vec<Vec<(String,u32)>> = vec![vec![]; 256];
+    let mut hashmap: Vec<Vec<(String, u32)>> = vec![vec![]; 256];
 
     for step in steps {
         sum1 += hash(step);

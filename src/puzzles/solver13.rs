@@ -7,7 +7,10 @@ fn diff(s1: &Vec<char>, s2: &Vec<char>) -> usize {
 }
 
 fn solve_part(part: &str, comp: usize) -> usize {
-    let lines: Vec<Vec<char>> = part.split_ascii_whitespace().map(|line| line.chars().collect::<Vec<char>>()).collect();
+    let lines: Vec<Vec<char>> = part
+        .split_ascii_whitespace()
+        .map(|line| line.chars().collect::<Vec<char>>())
+        .collect();
 
     let mut c = 0;
     let mut r = 0;
@@ -23,11 +26,11 @@ fn solve_part(part: &str, comp: usize) -> usize {
         }
     }
 
-    for i in 0..m-1 {
-        let mj = std::cmp::min(i + 1, m-i-1);
+    for i in 0..m - 1 {
+        let mj = std::cmp::min(i + 1, m - i - 1);
         let mut eq: usize = 0;
         for j in 0..mj {
-            eq += diff(&lines_tranposed[i-j], &lines_tranposed[i+1+j]);
+            eq += diff(&lines_tranposed[i - j], &lines_tranposed[i + 1 + j]);
         }
 
         if eq == comp {
@@ -35,11 +38,11 @@ fn solve_part(part: &str, comp: usize) -> usize {
         }
     }
 
-    for i in 0..n-1 {
-        let mj = std::cmp::min(i + 1, n-i-1);
+    for i in 0..n - 1 {
+        let mj = std::cmp::min(i + 1, n - i - 1);
         let mut eq: usize = 0;
         for j in 0..mj {
-            eq += diff(&lines[i-j], &lines[i+1+j]);
+            eq += diff(&lines[i - j], &lines[i + 1 + j]);
         }
 
         if eq == comp {

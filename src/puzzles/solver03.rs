@@ -1,4 +1,4 @@
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap, HashSet};
 
 pub fn solve() {
     const FILE_PATH: &str = "assets/input03.txt";
@@ -6,7 +6,7 @@ pub fn solve() {
     let lines = txt.lines();
 
     let mut field: Vec<Vec<char>> = Vec::new();
-    let mut bit_field : Vec<Vec<bool>> = Vec::new();
+    let mut bit_field: Vec<Vec<bool>> = Vec::new();
 
     for line in lines {
         bit_field.push(vec![false; line.len()]);
@@ -15,11 +15,17 @@ pub fn solve() {
 
     for i in 0..field.len() {
         for j in 0..field[i].len() {
-            if field[i][j] == '.' || field[i][j].is_digit(10) { continue; }
+            if field[i][j] == '.' || field[i][j].is_digit(10) {
+                continue;
+            }
             for di in -1..2 {
                 for dj in -1..2 {
-                    if i as i32 + di < 0 || i as i32 + di >= field.len() as i32 { continue; }
-                    if j as i32 + dj < 0 || j as i32 + dj >= field[i].len() as i32 { continue; }
+                    if i as i32 + di < 0 || i as i32 + di >= field.len() as i32 {
+                        continue;
+                    }
+                    if j as i32 + dj < 0 || j as i32 + dj >= field[i].len() as i32 {
+                        continue;
+                    }
                     bit_field[(i as i32 + di) as usize][(j as i32 + dj) as usize] = true;
                 }
             }
@@ -41,22 +47,26 @@ pub fn solve() {
 
                 for di in -1..2 {
                     for dj in -1..2 {
-                        if i as i32 + di < 0 || i as i32 + di >= field.len() as i32 { continue; }
-                        if j as i32 + dj < 0 || j as i32 + dj >= field[i].len() as i32 { continue; }
-                        if field[(i as i32 + di) as usize][(j as i32 + dj) as usize] != '*' { continue; }
-                        where_add.insert(((i as i32 + di) as usize,(j as i32 + dj) as usize));
+                        if i as i32 + di < 0 || i as i32 + di >= field.len() as i32 {
+                            continue;
+                        }
+                        if j as i32 + dj < 0 || j as i32 + dj >= field[i].len() as i32 {
+                            continue;
+                        }
+                        if field[(i as i32 + di) as usize][(j as i32 + dj) as usize] != '*' {
+                            continue;
+                        }
+                        where_add.insert(((i as i32 + di) as usize, (j as i32 + dj) as usize));
                     }
                 }
-            }
-            else {
+            } else {
                 if should_add {
                     sum_of_all += to_add;
                 }
                 for key in &where_add {
                     if gears.contains_key(key) {
                         gears.get_mut(key).unwrap().push(to_add);
-                    }
-                    else {
+                    } else {
                         gears.insert(*key, vec![to_add]);
                     }
                 }
@@ -71,8 +81,7 @@ pub fn solve() {
         for key in &where_add {
             if gears.contains_key(key) {
                 gears.get_mut(key).unwrap().push(to_add);
-            }
-            else {
+            } else {
                 gears.insert(*key, vec![to_add]);
             }
         }

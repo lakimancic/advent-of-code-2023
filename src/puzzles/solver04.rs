@@ -6,7 +6,7 @@ pub fn solve() {
     let lines_count = txt.lines().count();
     let lines = txt.lines();
 
-    let mut sum_of_wins:u64 = 0;
+    let mut sum_of_wins: u64 = 0;
     let mut wins_dp = vec![1; lines_count];
 
     for (j, line) in lines.enumerate() {
@@ -15,7 +15,10 @@ pub fn solve() {
 
         let re = Regex::new(r"\d+").unwrap();
 
-        let winnings:Vec<&str> = re.captures_iter(splits[0]).map(|x| x.get(0).unwrap().as_str()).collect();
+        let winnings: Vec<&str> = re
+            .captures_iter(splits[0])
+            .map(|x| x.get(0).unwrap().as_str())
+            .collect();
         let mut num_of_wins: u64 = 0;
         let mut cnt_of_wins: usize = 0;
 
@@ -23,8 +26,7 @@ pub fn solve() {
             if winnings.contains(&capture.get(0).unwrap().as_str()) {
                 if num_of_wins == 0 {
                     num_of_wins = 1;
-                }
-                else {
+                } else {
                     num_of_wins *= 2;
                 }
                 cnt_of_wins += 1;
@@ -32,7 +34,7 @@ pub fn solve() {
         }
 
         for i in 0..cnt_of_wins {
-            wins_dp[j+i+1] += wins_dp[j];
+            wins_dp[j + i + 1] += wins_dp[j];
         }
 
         sum_of_wins += num_of_wins;

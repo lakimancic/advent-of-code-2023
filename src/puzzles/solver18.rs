@@ -6,7 +6,7 @@ fn get_dir(dir: &str) -> (i64, i64) {
         "L" => (0, -1),
         "D" => (1, 0),
         "U" => (-1, 0),
-        _ => (0, 0)
+        _ => (0, 0),
     }
 }
 
@@ -21,7 +21,7 @@ pub fn solve() {
     let mut pom_sum = 0i64;
     let mut sum2 = 0i64;
     let mut pom_sum2 = 0i64;
-    
+
     for line in txt.lines() {
         let re = regex::Regex::new(r"([UDLR]) (\d+) \(#([0-9a-f]+)\)").unwrap();
         let splits = re.captures(line).unwrap();

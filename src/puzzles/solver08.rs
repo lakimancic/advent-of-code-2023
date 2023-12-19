@@ -10,7 +10,7 @@ fn gcd(a: usize, b: usize) -> usize {
         ma = tmp;
     }
 
-   ma
+    ma
 }
 
 fn lcm(a: usize, b: usize) -> usize {
@@ -31,7 +31,9 @@ pub fn solve() {
 
         let par = splits[0];
         let childs = splits[1];
-        let childs = &childs[1..childs.len()-1].split(", ").collect::<Vec<&str>>();
+        let childs = &childs[1..childs.len() - 1]
+            .split(", ")
+            .collect::<Vec<&str>>();
 
         let left = childs[0];
         let right = childs[1];
@@ -49,8 +51,7 @@ pub fn solve() {
     while state != "ZZZ" {
         if seq[cnt % seq.len()] == 'L' {
             state = tree.get(state).unwrap().0;
-        }
-        else {
+        } else {
             state = tree.get(state).unwrap().1;
         }
         cnt += 1;
@@ -66,8 +67,7 @@ pub fn solve() {
         while !new_state.ends_with("Z") {
             if seq[cnt % seq.len()] == 'L' {
                 new_state = tree.get(new_state).unwrap().0;
-            }
-            else {
+            } else {
                 new_state = tree.get(new_state).unwrap().1;
             }
             cnt += 1;
