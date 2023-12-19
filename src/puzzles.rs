@@ -16,3 +16,4 @@ pub mod solver15;
 pub mod solver16;
 pub mod solver17;
 pub mod solver18;
+pub mod solver19;

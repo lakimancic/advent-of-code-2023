@@ -1,12 +1,12 @@
 use priority_queue::PriorityQueue;
-use std::{collections::HashMap, cmp::Reverse};
+use std::cmp::Reverse;
 
 static DIRS: [(i32, i32); 4] = [(0, 1), (1, 0), (0, -1), (-1, 0)];
 
 fn dijkstra(mat: &Vec<Vec<u32>>, minm: u32, maxm: u32) -> u32 {
     let mut pq: PriorityQueue<(u32, i32, i32, usize), Reverse<u32>> = PriorityQueue::new();
     let mut vis = vec![vec![[false;4];mat[0].len()];mat.len()];
-    let mut dist: HashMap<(i32, i32, usize), u32> = HashMap::new();
+    let mut dist = vec![vec![[u32::MAX;4];mat[0].len()];mat.len()];
 
     pq.push((0, 0, 0, usize::MAX), Reverse(0));
 
@@ -37,14 +37,10 @@ fn dijkstra(mat: &Vec<Vec<u32>>, minm: u32, maxm: u32) -> u32 {
                 dinc += mat[ni as usize][nj as usize];
                 if ndis < minm { continue; }
                 let nd = d + dinc;
-                let for_c = match dist.get(&(ni, nj, ndir)) {
-                    Some(x) => *x,
-                    None => u32::MAX
-                };
-                if for_c <= nd {
+                if dist[ni as usize][nj as usize][ndir] <= nd {
                     continue;
                 }
-                dist.insert((ni, nj, ndir), nd);
+                dist[ni as usize][nj as usize][ndir] = nd;
                 pq.push((nd, ni, nj, ndir), Reverse(nd));
             }
         }
