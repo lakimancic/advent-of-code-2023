@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Debug)]
 struct Element {
@@ -52,11 +52,33 @@ impl Clone for Element {
     }
 }
 
+fn gcd(a: usize, b: usize) -> usize {
+    let mut ma = a;
+    let mut mb = b;
+
+    while mb > 0 {
+        let tmp = mb;
+        mb = ma % mb;
+        ma = tmp;
+    }
+
+    ma
+}
+
+fn lcm(a: usize, b: usize) -> usize {
+    a * b / gcd(a, b)
+}
+
 fn button_click(
     graph: &mut HashMap<&str, Element>,
     broadcast: &Vec<String>,
     low_cnt: &mut usize,
     high_cnt: &mut usize,
+    ind: &usize,
+    prev: &mut HashMap<String, usize>,
+    vis: &mut HashSet<String>,
+    lcm_num: &mut usize,
+    rx_parents: &Vec<String>,
 ) {
     let mut queue: Vec<String> = vec![];
     *low_cnt += 1 + broadcast.len();
@@ -79,6 +101,13 @@ fn button_click(
         let childs = elem.childs.clone();
 
         if new_input {
+            if rx_parents.contains(&node) {
+                if !vis.contains(&node) && prev.contains_key(&node) {
+                    *lcm_num = lcm(*lcm_num, ind - prev.get(&node).unwrap());
+                    vis.insert(node.clone());
+                }
+                prev.insert(node.clone(), *ind);
+            }
             *high_cnt += childs.len();
         } else {
             *low_cnt += childs.len();
@@ -142,10 +171,38 @@ pub fn solve() {
 
     let mut low_cnt = 0;
     let mut high_cnt = 0;
+    let mut prev: HashMap<String, usize> = HashMap::new();
+    let mut vis: HashSet<String> = HashSet::new();
+    let mut lcm = 1usize;
+    let rx_parents = graph
+        .values()
+        .find(|node| node.childs.contains(&"rx".to_string()))
+        .unwrap()
+        .inputs
+        .keys()
+        .map(|key| key.clone())
+        .collect::<Vec<_>>();
 
-    for _ in 0..1000 {
-        button_click(&mut graph, &broadcast, &mut low_cnt, &mut high_cnt);
+    for i in 0..100000 {
+        if i == 1000 {
+            println!("Part 1 solution is: {}", low_cnt * high_cnt);
+        }
+
+        if vis.len() == rx_parents.len() {
+            println!("Part 2 solution is: {}", lcm);
+            break;
+        }
+
+        button_click(
+            &mut graph,
+            &broadcast,
+            &mut low_cnt,
+            &mut high_cnt,
+            &i,
+            &mut prev,
+            &mut vis,
+            &mut lcm,
+            &rx_parents,
+        );
     }
-
-    println!("Part 1 solution is: {}", low_cnt * high_cnt);
 }
