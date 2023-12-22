@@ -1,4 +1,4 @@
-use std::cmp::*;
+use std::{cmp::*, collections::VecDeque};
 
 #[derive(Debug, Eq, PartialEq)]
 struct Point {
@@ -114,29 +114,42 @@ pub fn solve() {
     bricks.sort();
 
     let mut cnt = 0usize;
+    let mut cnt2 = 0usize;
 
     for i in 0..bricks.len() {
         let brick = &bricks[i];
         let mut j = i + 1;
-        let mut can = true;
+        let mut can = 0usize;
 
         brick.rev_layer(&mut layers[brick.to.z]);
 
-        while j < bricks.len() && bricks[j].from.z <= bricks[i].to.z + 1 {
+        let mut stack: VecDeque<usize> = VecDeque::new();
+
+        while j < bricks.len() {
             if bricks[j].from.z < bricks[i].to.z + 1 {
                 j += 1;
                 continue;
             }
-            can = can && bricks[j].check_layer(&layers[bricks[i].to.z]);
+
+            if !bricks[j].check_layer(&layers[bricks[j].from.z - 1]) {
+                stack.push_back(j);
+                bricks[j].rev_layer(&mut layers[bricks[j].to.z]);
+                can += 1;
+            }
             j += 1;
+        }
+
+        while stack.len() > 0 {
+            let brick = &bricks[stack.pop_back().unwrap()];
+            brick.rev_layer(&mut layers[brick.to.z]);
         }
 
         brick.rev_layer(&mut layers[brick.to.z]);
 
-        if can {
-            cnt += 1;
-        }
+        cnt2 += can;
+        cnt += (can == 0) as usize;
     }
 
     println!("Part 1 solution is: {}", cnt);
+    println!("Part 2 solution is: {}", cnt2);
 }
