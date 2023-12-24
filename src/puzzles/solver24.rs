@@ -1,3 +1,5 @@
+use z3::ast::Ast;
+
 #[derive(Debug)]
 struct Hailstone {
     x: f64,
@@ -52,4 +54,40 @@ pub fn solve() {
     }
 
     println!("Part 1 solution is: {}", cnt);
+
+    let cfg = z3::Config::new();
+    let ctx = z3::Context::new(&cfg);
+    let solver = z3::Solver::new(&ctx);
+
+    let x = z3::ast::Int::new_const(&ctx, "x");
+    let y = z3::ast::Int::new_const(&ctx, "y");
+    let z = z3::ast::Int::new_const(&ctx, "z");
+    let vx = z3::ast::Int::new_const(&ctx, "vx");
+    let vy = z3::ast::Int::new_const(&ctx, "vy");
+    let vz = z3::ast::Int::new_const(&ctx, "vz");
+
+    for (i, hstone) in hstones.iter().enumerate() {
+        let cx = z3::ast::Int::from_i64(&ctx, hstone.x as i64);
+        let cvx = z3::ast::Int::from_i64(&ctx, hstone.vx as i64);
+        let cy = z3::ast::Int::from_i64(&ctx, hstone.y as i64);
+        let cvy = z3::ast::Int::from_i64(&ctx, hstone.vy as i64);
+        let cz = z3::ast::Int::from_i64(&ctx, hstone.z as i64);
+        let cvz = z3::ast::Int::from_i64(&ctx, hstone.vz as i64);
+
+        let t = z3::ast::Int::new_const(&ctx, format!("T{i}"));
+        solver.assert(&t.gt(&z3::ast::Int::from_i64(&ctx, 0)));
+        solver.assert(&(x.clone() + vx.clone() * t.clone())._eq(&(cx + cvx * t.clone())));
+        solver.assert(&(y.clone() + vy.clone() * t.clone())._eq(&(cy + cvy * t.clone())));
+        solver.assert(&(z.clone() + vz.clone() * t.clone())._eq(&(cz + cvz * t.clone())));
+    }
+
+    if solver.check() == z3::SatResult::Sat {
+        let Some(m) = solver.get_model() else {
+            return;
+        };
+        println!(
+            "Part 2 solution is: {}",
+            m.eval(&(x + y + z), true).unwrap()
+        );
+    }
 }
