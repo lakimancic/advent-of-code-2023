@@ -22,3 +22,4 @@ pub mod solver21;
 pub mod solver22;
 pub mod solver23;
 pub mod solver24;
+pub mod solver25;

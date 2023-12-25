@@ -27,6 +27,7 @@ fn call_solve(day: u32) {
         22 => puzzles::solver22::solve(),
         23 => puzzles::solver23::solve(),
         24 => puzzles::solver24::solve(),
+        25 => puzzles::solver25::solve(),
         _ => println!("Invalid day!"),
     }
 }
@@ -37,6 +38,8 @@ fn main() {
     if args.len() == 2 {
         call_solve(args[1].parse::<u32>().unwrap());
     } else {
-        println!("Invalid number of arguments!");
+        for i in 1u32..26 {
+            call_solve(i);
+        }
     }
 }
